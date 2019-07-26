@@ -7,4 +7,13 @@
 	<body>
 		<a href="https://tool.os000.com">tool.os000.com</a>
 	</body>
+	<script>
+		var type = navigator.connection.type;
+		
+		function measureBW () {
+			var sk = navigator.connection.downlink * 1024 /8;
+			console.log(sk)
+		}
+		setInterval(measureBW,1000)
+	</script>
 </html>
