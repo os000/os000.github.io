@@ -1,19 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title></title>
-	</head>
-	<body>
-		<a href="https://tool.os000.com">tool.os000.com</a>
-	</body>
-	<script>
-		var type = navigator.connection.type;
-		
-		function measureBW () {
-			var sk = navigator.connection.downlink * 1024 /8;
-			console.log(sk)
-		}
-		setInterval(measureBW,1000)
-	</script>
+<head>
+<meta http-equiv=Content-Type content="text/html;charset=utf-8">
+<title>js实现的网速测试方法</title>
+</head>
+<body>
+	s:<span id="speed">1</span>k/s <br />
+	avgs:<span id="averagespeed">1</span>k/s
+<script>
+//图片大小  单位kb
+var filesize = 126.0 
+var sum=0;
+var n=0;
+var starttime;
+function getVelocity(timestamp) {
+    var endtime = new Date();
+    var speed = formatFloat(Math.round(filesize * 1024) / (endtime - starttime),2);    //得到网速 kb/s  
+    sum+=speed;n++;
+    var averagespeed=formatFloat(sum/n,2);
+    document.getElementById('speed').innerHTML = speed;
+    document.getElementById('averagespeed').innerHTML = averagespeed;
+    removeNode(timestamp)
+}
+
+function removeNode(id){
+	var no = document.getElementById(id);
+	document.getElementsByTagName('body')[0].removeChild(no);
+}
+setInterval(function(){
+	var nowtime = new Date();
+    var timestamp = nowtime.getTime();//http://lamb.b3log.org/
+    var imgsrc = "http://hiphotos.baidu.com/baidu/pic/item/da6c6827187c9620908f9d2b.jpeg?timestamp="+timestamp;
+    
+    var img = document.createElement('img');
+    img.setAttribute('id',timestamp);
+    img.setAttribute('src',imgsrc);
+    img.setAttribute('width',0);
+    img.setAttribute('height',0);
+    document.getElementsByTagName('body')[0].appendChild(img);
+    img.onload = function(){
+    	getVelocity(timestamp);
+    }
+    starttime = new Date();
+},1000)
+function formatFloat(src, pos)
+{
+     return Math.round(src*Math.pow(10, pos))/Math.pow(10, pos);
+}
+
+
+</script>
+</body>
 </html>
